@@ -5,9 +5,15 @@ branding:
   icon: 'crosshair'  
   color: 'blue'
 inputs:
-  commentText: # change this
+  commentText: 
     required: true
     description: 'text of the comment to act on'
+  ref: 
+    required: true
+    description: 'ref to branch or tag that triggered the action'
+  repo:
+    required: true
+    description: 'repo to run action on org/reponame'
 runs:
   using: 'node12'
   main: 'dist/index.js'
