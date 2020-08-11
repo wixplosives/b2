@@ -195,7 +195,7 @@ function run() {
             const commentText = core.getInput('commentText');
             if (commentText.includes('@measure')) {
                 core.debug(`Found measure command`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
-                const octokit = Octokit();
+                const octokit = new Octokit();
                 yield octokit.request('POST /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches', {
                     owner: 'wixplosives',
                     repo: 'test-p-1',
