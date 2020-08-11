@@ -193,14 +193,14 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const commentText = core.getInput('commentText');
+            const refParam = core.getInput('ref');
             if (commentText.includes('@measure')) {
-                core.debug(`Found measure command`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+                core.info(`Found measure command`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
                 const octokit = new Octokit();
-                yield octokit.request('POST /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches', {
-                    owner: 'wixplosives',
-                    repo: 'test-p-1',
-                    workflow_id: 'test.yaml',
-                    ref: 'master'
+                yield octokit.request('POST repos/:repository/actions/workflows/:workflow_id/dispatches', {
+                    ref: refParam,
+                    repository: 'wixplosives/test-p-1',
+                    workflow_id: 'test.yaml'
                 });
             }
             core.setOutput('Complete', new Date().toTimeString());
