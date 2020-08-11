@@ -6,7 +6,7 @@ async function run(): Promise<void> {
     const commentText: string = core.getInput('commentText')
     if (commentText.includes('@measure')) {
       core.debug(`Found measure command`) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
-      const octokit = Octokit()
+      const octokit = new Octokit()
       await octokit.request(
         'POST /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches',
         {
