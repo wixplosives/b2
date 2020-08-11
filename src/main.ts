@@ -9,7 +9,7 @@ async function run(): Promise<void> {
       core.info(`Found measure command`) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
       const octokit = new Octokit()
       await octokit.request(
-        'POST repos/:repository/actions/workflows/:workflow_id/dispatches',
+        'POST /repos/:repository/actions/workflows/:workflow_id/dispatches',
         {
           ref: refParam,
           repository: 'wixplosives/test-p-1',
