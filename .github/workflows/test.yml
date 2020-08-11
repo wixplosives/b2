@@ -22,7 +22,7 @@ jobs:
       - uses: ./
         with:
           commentText: "@measure test"
-          ref: ${{ github.ref }}
+          ref: ${{ github.sha }}
           full: ${{ toJson(github) }}
         env:
           GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
