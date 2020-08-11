@@ -1,6 +1,8 @@
 name: 'core3-b2'
 description: 'Generic CI bot'
 author: 'core3'
+color: blue
+icon: crosshair
 inputs:
   commentText: # change this
     required: true
