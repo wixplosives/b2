@@ -12,3 +12,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "Action name ${{ github.event.inputs.action_name }}!"
+      - run: echo "Ref ${{ github.ref }}"
