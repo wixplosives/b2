@@ -44,9 +44,11 @@ See the [versioning documentation](https://github.com/actions/toolkit/blob/maste
 You can now validate the action by referencing `./` in a workflow in your repo (see [test.yml](.github/workflows/test.yml))
 
 ```yaml
-uses: ./
-with:
-  milliseconds: 1000
+- uses: ./
+    with:
+      commentText: "@measure test"
+      ref: ${{ github.ref }}
+      repo: 'wixplosives/b2'
 ```
 
 See the [actions tab](https://github.com/actions/javascript-action/actions) for runs of this action! :rocket:
