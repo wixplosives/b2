@@ -6,21 +6,28 @@ async function run(): Promise<void> {
     const commentText: string = core.getInput('commentText')
     const refParam: string = core.getInput('ref')
     const repo: string = core.getInput('repo')
+    const dryrun: string = core.getInput('dryrun')
+    core.info(
+      `Executing. comment: ${commentText} repo:${repo}. ref: ${refParam}`
+    )
     if (commentText.includes('@measure')) {
-      core.info(`Found @measure command`) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
-      core.info(repo)
-      core.info(refParam)
-      const octokit = new Octokit()
-      await octokit.request(
-        'POST /repos/:repository/actions/workflows/:workflow_id/dispatches',
-        {
-          ref: refParam,
-          repository: repo,
-          workflow_id: 'test.yaml'
-        }
-      )
+      const commandUrl =
+        'POST /repos/:repository/actions/workflows/:workflow_id/dispatches'
+      const commandParams = {
+        ref: refParam,
+        repository: repo,
+        workflow_id: 'measure.yaml'
+      }
+      core.info(`Found @measure command. repo: ${repo}. ref: ${refParam}`) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+      if (dryrun === 'true') {
+        const paramsString = JSON.stringify(commandParams)
+        core.info(`Octokit dryrun. url: ${commandUrl} params: ${paramsString}`)
+      } else {
+        const octokit = new Octokit()
+        await octokit.request(commandUrl, commandParams)
+      }
     }
-    core.setOutput('Complete', new Date().toTimeString())
+    core.setOutput('Exiting', new Date().toTimeString())
   } catch (error) {
     core.setFailed(error.message)
   }
