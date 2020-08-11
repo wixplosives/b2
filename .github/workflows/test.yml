@@ -22,7 +22,7 @@ jobs:
       - uses: ./
         with:
           commentText: "@measure test"
-          ref: ${{ github.sha }}
+          ref: ${{ github.ref }}
           repo: 'wixplosives/b2'
         env:
           GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
