@@ -14,7 +14,10 @@ test('test runs', () => {
   const commandParams = {
     ref: process.env['INPUT_REF'],
     repository: process.env['INPUT_REPO'],
-    workflow_id: 'measure.yaml'
+    workflow_id: 'measure.yaml',
+    inputs: {
+      action_name: 'fake_measure'
+    }
   }
   const paramsString = JSON.stringify(commandParams)
   const expectedResponse = `Octokit dryrun. url: POST /repos/:repository/actions/workflows/:workflow_id/dispatches params: ${paramsString}`
