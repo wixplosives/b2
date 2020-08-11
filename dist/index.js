@@ -202,7 +202,10 @@ function run() {
                 const commandParams = {
                     ref: refParam,
                     repository: repo,
-                    workflow_id: 'measure.yaml'
+                    workflow_id: 'measure.yaml',
+                    inputs: {
+                        action_name: 'fake_measure'
+                    }
                 };
                 core.info(`Found @measure command. repo: ${repo}. ref: ${refParam}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
                 if (dryrun === 'true') {
