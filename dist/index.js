@@ -196,7 +196,9 @@ function run() {
             const refParam = core.getInput('ref');
             const repo = core.getInput('repo');
             if (commentText.includes('@measure')) {
-                core.info(`Found measure command`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+                core.info(`Found @measure command`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+                core.info(repo);
+                core.info(refParam);
                 const octokit = new action_1.Octokit();
                 yield octokit.request('POST /repos/:repository/actions/workflows/:workflow_id/dispatches', {
                     ref: refParam,
@@ -204,7 +206,6 @@ function run() {
                     workflow_id: 'test.yaml'
                 });
             }
-            core.info(`Complete`);
             core.setOutput('Complete', new Date().toTimeString());
         }
         catch (error) {

@@ -7,7 +7,9 @@ async function run(): Promise<void> {
     const refParam: string = core.getInput('ref')
     const repo: string = core.getInput('repo')
     if (commentText.includes('@measure')) {
-      core.info(`Found measure command`) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+      core.info(`Found @measure command`) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+      core.info(repo)
+      core.info(refParam)
       const octokit = new Octokit()
       await octokit.request(
         'POST /repos/:repository/actions/workflows/:workflow_id/dispatches',
@@ -18,7 +20,6 @@ async function run(): Promise<void> {
         }
       )
     }
-    core.info(`Complete`)
     core.setOutput('Complete', new Date().toTimeString())
   } catch (error) {
     core.setFailed(error.message)
