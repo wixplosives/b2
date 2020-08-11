@@ -1,11 +1,10 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'core3-b2'
+description: 'Generic CI bot'
+author: 'core3'
 inputs:
-  milliseconds: # change this
+  commentText: # change this
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: 'text of the comment to act on'
 runs:
   using: 'node12'
   main: 'dist/index.js'
