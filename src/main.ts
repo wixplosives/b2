@@ -1,6 +1,5 @@
 import * as core from '@actions/core'
-
-const { Octokit } = require("@octokit/action");
+import {Octokit} from '@octokit/action'
 
 async function run(): Promise<void> {
   try {

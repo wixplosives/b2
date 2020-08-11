@@ -188,7 +188,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(470));
-const Octokit = __webpack_require__(725);
+const action_1 = __webpack_require__(725);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -197,7 +197,7 @@ function run() {
             const repo = core.getInput('repo');
             if (commentText.includes('@measure')) {
                 core.info(`Found measure command`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
-                const octokit = new Octokit();
+                const octokit = new action_1.Octokit();
                 yield octokit.request('POST /repos/:repository/actions/workflows/:workflow_id/dispatches', {
                     ref: refParam,
                     repository: repo,
