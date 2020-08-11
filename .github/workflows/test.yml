@@ -25,4 +25,4 @@ jobs:
           ref: ${{ github.ref }}
           repo: 'wixplosives/b2'
         env:
-          GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
