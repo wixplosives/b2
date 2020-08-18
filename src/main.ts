@@ -14,7 +14,7 @@ async function run(): Promise<void> {
       const commandUrl =
         'POST /repos/:repository/actions/workflows/:workflow_id/dispatches'
       const commandParams = {
-        ref: refParam,
+        ref: 'master',
         repository: repo,
         workflow_id: 'measure.yaml',
         inputs: {
