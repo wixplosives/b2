@@ -28,12 +28,13 @@ async function run(): Promise<void> {
     //const refParam: string = core.getInput('ref')
     const repo: string = core.getInput('repo')
     const pull_request_url: string = core.getInput('pull_request_url')
-    const branch_ref = await get_branch_name(repo, pull_request_url)
     //const issue_comment_url: string = core.getInput('issue_comment_url')
 
     core.info(
       `Executing. comment: ${commentText} repo:${repo}. pr_url: ${pull_request_url}`
     )
+    const branch_ref = await get_branch_name(repo, pull_request_url)
+
     if (commentText.includes('@measure')) {
       const commandUrl =
         'POST /repos/:repository/actions/workflows/:workflow_id/dispatches'
