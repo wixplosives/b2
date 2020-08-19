@@ -214,8 +214,11 @@ function run() {
             const repo = core.getInput('repo');
             const pull_request_url = core.getInput('pull_request_url');
             //const issue_comment_url: string = core.getInput('issue_comment_url')
+            let branch_ref = 'master';
+            if (pull_request_url !== '') {
+                branch_ref = yield get_branch_name(repo, pull_request_url);
+            }
             core.info(`Executing. comment: ${commentText} repo:${repo}. pr_url: ${pull_request_url}`);
-            const branch_ref = yield get_branch_name(repo, pull_request_url);
             if (commentText.includes('@measure')) {
                 const commandUrl = 'POST /repos/:repository/actions/workflows/:workflow_id/dispatches';
                 const commandParams = {
