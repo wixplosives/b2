@@ -25,14 +25,14 @@ async function run(): Promise<void> {
   try {
     const dryrun: string = core.getInput('dryrun')
     const commentText: string = core.getInput('commentText')
-    const refParam: string = core.getInput('ref')
+    //const refParam: string = core.getInput('ref')
     const repo: string = core.getInput('repo')
     const pull_request_url: string = core.getInput('pull_request_url')
     const branch_ref = await get_branch_name(repo, pull_request_url)
     //const issue_comment_url: string = core.getInput('issue_comment_url')
 
     core.info(
-      `Executing. comment: ${commentText} repo:${repo}. ref: ${refParam}`
+      `Executing. comment: ${commentText} repo:${repo}. pr_irl: ${pull_request_url}`
     )
     if (commentText.includes('@measure')) {
       const commandUrl =
@@ -46,7 +46,9 @@ async function run(): Promise<void> {
         }
       }
 
-      core.info(`Found @measure command. repo: ${repo}. ref: ${refParam}`) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+      core.info(
+        `Found @measure command. repo: ${repo}. ref: ${commandParams.ref}`
+      ) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
       if (dryrun === 'true') {
         const paramsString = JSON.stringify(commandParams)
         core.info(`Octokit dryrun. url: ${commandUrl} params: ${paramsString}`)
