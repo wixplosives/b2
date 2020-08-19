@@ -14,6 +14,10 @@ inputs:
   repo:
     required: true
     description: 'repo to run action on org/reponame'
+  pull_request_link:
+    required: true
+    description: 'pull request link ( github.event.issue.pull_request.url )"'
+
 runs:
   using: 'node12'
   main: 'dist/index.js'

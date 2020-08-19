@@ -25,11 +25,11 @@ async function run(): Promise<void> {
   try {
     const dryrun: string = core.getInput('dryrun')
     const commentText: string = core.getInput('commentText')
-    //const refParam: string = core.getInput('ref')
+    const refParam: string = core.getInput('ref')
     const repo: string = core.getInput('repo')
     const pull_request_url: string = core.getInput('pull_request_url')
     //const issue_comment_url: string = core.getInput('issue_comment_url')
-    let branch_ref = 'refs/heads/master'
+    let branch_ref = refParam
     if (pull_request_url !== '') {
       branch_ref = await get_branch_name(repo, pull_request_url)
     }
