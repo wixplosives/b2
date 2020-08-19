@@ -32,7 +32,7 @@ async function run(): Promise<void> {
     //const issue_comment_url: string = core.getInput('issue_comment_url')
 
     core.info(
-      `Executing. comment: ${commentText} repo:${repo}. pr_irl: ${pull_request_url}`
+      `Executing. comment: ${commentText} repo:${repo}. pr_url: ${pull_request_url}`
     )
     if (commentText.includes('@measure')) {
       const commandUrl =
