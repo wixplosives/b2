@@ -1,8 +1,9 @@
 import * as process from 'process'
 import * as cp from 'child_process'
 import * as path from 'path'
+import {}
 
-test('test runs', () => {
+xtest('test runs', () => {
   process.env['INPUT_COMMENTTEXT'] = '@measure something'
   process.env['INPUT_REPO'] = 'wixplosives'
   process.env['INPUT_REF'] = 'b2'
@@ -24,3 +25,4 @@ test('test runs', () => {
   const output = cp.execSync(`node ${ip}`, options).toString().split('\n')
   expect(output.includes(expectedResponse)).toBeTruthy()
 })
+
