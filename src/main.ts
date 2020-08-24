@@ -1,20 +1,28 @@
 import * as core from '@actions/core'
 import {Octokit} from '@octokit/action'
 
+export function parsePullRequestNumFromUrl(url: string): number {
+  const parts = url.split('/')
+  if (parts.length > 1 && !isNaN(+parts[parts.length - 1])) {
+    const pull_request_num = Number(parts[parts.length - 1])
+    return pull_request_num
+  } else {
+    throw new Error('Bad pull request format')
+  }
+}
+
 async function get_branch_name(
-  repo_stub: string,
+  repo_owner: string,
+  repo_name: string,
   pull_request_url: string
 ): Promise<string> {
-  const repo_stub_parts = repo_stub.split('/')
-  const parts = pull_request_url.split('/')
-  const pull_request_num = parts[parts.length - 1]
-
+  const pull_request_num = parsePullRequestNumFromUrl(pull_request_url)
   const octokit = new Octokit()
   const commandUrl = 'GET /repos/:owner/:repo/pulls/:pull_number'
   const commandParams = {
-    owner: repo_stub_parts[0],
-    repo: repo_stub_parts[1],
-    pull_number: parseInt(pull_request_num)
+    owner: repo_owner,
+    repo: repo_name,
+    pull_number: pull_request_num
   }
   const retval = await octokit.request(commandUrl, commandParams)
 
@@ -28,10 +36,15 @@ async function run(): Promise<void> {
     const refParam: string = core.getInput('ref')
     const repo: string = core.getInput('repo')
     const pull_request_url: string = core.getInput('pull_request_url')
-    //const issue_comment_url: string = core.getInput('issue_comment_url')
+    const issue_comment_url: string = core.getInput('issue_comment_url')
     let branch_ref = refParam
     if (pull_request_url !== '') {
-      branch_ref = await get_branch_name(repo, pull_request_url)
+      const repo_stub_parts = repo.split('/')
+      branch_ref = await get_branch_name(
+        repo_stub_parts[0],
+        repo_stub_parts[1],
+        pull_request_url
+      )
     }
     core.info(
       `Executing. comment: ${commentText} repo:${repo}. pr_url: ${pull_request_url}`
@@ -44,10 +57,10 @@ async function run(): Promise<void> {
         repository: repo,
         workflow_id: 'measure.yaml',
         inputs: {
-          action_name: 'fake_measure'
+          action_name: 'measure',
+          issue_comment_link: issue_comment_url
         }
       }
-
       core.info(
         `Found @measure command. repo: ${repo}. ref: ${commandParams.ref}`
       ) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true

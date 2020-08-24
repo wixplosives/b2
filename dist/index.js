@@ -189,17 +189,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(470));
 const action_1 = __webpack_require__(725);
-function get_branch_name(repo_stub, pull_request_url) {
+function parsePullRequestNumFromUrl(url) {
+    const parts = url.split('/');
+    const pull_request_num = parseInt(parts[parts.length - 1]);
+    return pull_request_num;
+}
+function get_branch_name(repo_owner, repo_name, pull_request_url) {
     return __awaiter(this, void 0, void 0, function* () {
-        const repo_stub_parts = repo_stub.split('/');
-        const parts = pull_request_url.split('/');
-        const pull_request_num = parts[parts.length - 1];
+        const pull_request_num = parsePullRequestNumFromUrl(pull_request_url);
         const octokit = new action_1.Octokit();
         const commandUrl = 'GET /repos/:owner/:repo/pulls/:pull_number';
         const commandParams = {
-            owner: repo_stub_parts[0],
-            repo: repo_stub_parts[1],
-            pull_number: parseInt(pull_request_num)
+            owner: repo_owner,
+            repo: repo_name,
+            pull_number: pull_request_num
         };
         const retval = yield octokit.request(commandUrl, commandParams);
         return Promise.resolve(retval.data.head.ref);
@@ -216,7 +219,8 @@ function run() {
             //const issue_comment_url: string = core.getInput('issue_comment_url')
             let branch_ref = refParam;
             if (pull_request_url !== '') {
-                branch_ref = yield get_branch_name(repo, pull_request_url);
+                const repo_stub_parts = repo.split('/');
+                branch_ref = yield get_branch_name(repo_stub_parts[0], repo_stub_parts[1], pull_request_url);
             }
             core.info(`Executing. comment: ${commentText} repo:${repo}. pr_url: ${pull_request_url}`);
             if (commentText.includes('@measure')) {
