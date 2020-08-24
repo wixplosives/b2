@@ -187,13 +187,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.parsePullRequestNumFromUrl = void 0;
 const core = __importStar(__webpack_require__(470));
 const action_1 = __webpack_require__(725);
 function parsePullRequestNumFromUrl(url) {
     const parts = url.split('/');
-    const pull_request_num = parseInt(parts[parts.length - 1]);
-    return pull_request_num;
+    if (parts.length > 1 && !isNaN(+parts[parts.length - 1])) {
+        const pull_request_num = Number(parts[parts.length - 1]);
+        return pull_request_num;
+    }
+    else {
+        throw new Error('Bad pull request format');
+    }
 }
+exports.parsePullRequestNumFromUrl = parsePullRequestNumFromUrl;
 function get_branch_name(repo_owner, repo_name, pull_request_url) {
     return __awaiter(this, void 0, void 0, function* () {
         const pull_request_num = parsePullRequestNumFromUrl(pull_request_url);
@@ -216,7 +223,7 @@ function run() {
             const refParam = core.getInput('ref');
             const repo = core.getInput('repo');
             const pull_request_url = core.getInput('pull_request_url');
-            //const issue_comment_url: string = core.getInput('issue_comment_url')
+            const issue_comment_url = core.getInput('issue_comment_url');
             let branch_ref = refParam;
             if (pull_request_url !== '') {
                 const repo_stub_parts = repo.split('/');
@@ -230,7 +237,8 @@ function run() {
                     repository: repo,
                     workflow_id: 'measure.yaml',
                     inputs: {
-                        action_name: 'fake_measure'
+                        action_name: 'measure',
+                        issue_comment_link: issue_comment_url
                     }
                 };
                 core.info(`Found @measure command. repo: ${repo}. ref: ${commandParams.ref}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
