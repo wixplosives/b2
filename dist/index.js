@@ -237,7 +237,7 @@ function run() {
                     repository: repo,
                     workflow_id: 'measure.yaml',
                     inputs: {
-                        issue_comment_link: 'hereshouldbelink'
+                        issue_comment_link: issue_comment
                     }
                 };
                 core.info(`Found @measure command. repo: ${repo}. ref: ${commandParams.ref}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
