@@ -35,8 +35,8 @@ async function run(): Promise<void> {
     const commentText: string = core.getInput('commentText')
     const refParam: string = core.getInput('ref')
     const repo: string = core.getInput('repo')
-    const pull_request_url: string = core.getInput('pull_request_url')
-    const issue_comment_url: string = core.getInput('issue_comment_url')
+    const pull_request_url: string = core.getInput('pull_request_link')
+    const issue_comment_url: string = core.getInput('issue_comment_link')
     let branch_ref = refParam
     if (pull_request_url !== '') {
       const repo_stub_parts = repo.split('/')

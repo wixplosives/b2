@@ -5,16 +5,16 @@ on:
       action_name:
         description: "action name"
         required: false
-        default: "run_something"
+        default: "!!not specified!!"
       issue_comment_link:
         description: "issue comment link"
         required: false
-        default: ""
+        default: "!!not specified!!"
     
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - run: echo "Ref ${{ github.ref }}"
-      - run: echo "Action name ${{ github.event.inputs.action_name }}!"
-      - run: echo "Action name ${{ github.event.inputs.issue_comment_link }}!"
+      - run: echo "Action name ${{ github.event.inputs.action_name }}"
+      - run: echo "Issue comment link ${{ github.event.inputs.issue_comment_link }}"
