@@ -24,7 +24,7 @@ jobs:
         with:
           commentText: "@measure test"
           ref: ${{ github.ref }}
-          pull_request_url: "https://github.com/wixplosives/b2/pull/6"
+          pull_request_link: "https://github.com/wixplosives/b2/pull/6"
           issue_comment_link: "https://github.com/wixplosives/b2/pull/6#issuecomment-679265938"
           repo: 'wixplosives/b2'
         env:
