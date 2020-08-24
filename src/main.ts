@@ -57,7 +57,7 @@ async function run(): Promise<void> {
         repository: repo,
         workflow_id: 'measure.yaml',
         inputs: {
-          issue_comment_link: issue_comment
+          issue_comment_link: 'hereshouldbelink'
         }
       }
       core.info(
