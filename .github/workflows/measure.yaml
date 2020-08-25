@@ -2,8 +2,8 @@ name: fake_measure
 on:
   workflow_dispatch:
     inputs:
-      issue_comment_link:
-        description: "issue comment link"
+      issue_comment_id:
+        description: "issue comment id"
         required: false
         default: "!!not specified!!"
     
@@ -12,4 +12,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "Ref ${{ github.ref }}"
-      - run: echo "Issue comment link ${{ github.event.inputs.issue_comment_link }}"
+      - run: echo "Issue comment link ${{ github.event.inputs.issue_comment_id }}"

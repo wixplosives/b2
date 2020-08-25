@@ -223,13 +223,13 @@ function run() {
             const refParam = core.getInput('ref');
             const repo = core.getInput('repo');
             const pull_request = core.getInput('pull_request_link');
-            const issue_comment = core.getInput('issue_comment_link');
+            const issue_comment_id = core.getInput('issue_comment_id');
             let branch_ref = refParam;
             if (pull_request !== '') {
                 const repo_stub_parts = repo.split('/');
                 branch_ref = yield get_branch_name(repo_stub_parts[0], repo_stub_parts[1], pull_request);
             }
-            core.info(`Executing. comment: ${commentText} repo:${repo}, pull_request_link: ${pull_request}, issue comment link: ${issue_comment}`);
+            core.info(`Executing. comment: ${commentText} repo:${repo}, pull_request_link: ${pull_request}, issue comment id: ${issue_comment_id}`);
             if (commentText.includes('@measure')) {
                 const commandUrl = 'POST /repos/:repository/actions/workflows/:workflow_id/dispatches';
                 const commandParams = {
@@ -237,7 +237,7 @@ function run() {
                     repository: repo,
                     workflow_id: 'measure.yaml',
                     inputs: {
-                        issue_comment_link: 'hereshouldbelink'
+                        issue_id: issue_comment_id
                     }
                 };
                 core.info(`Found @measure command. repo: ${repo}. ref: ${commandParams.ref}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
