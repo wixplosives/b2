@@ -36,7 +36,7 @@ async function run(): Promise<void> {
     const refParam: string = core.getInput('ref')
     const repo: string = core.getInput('repo')
     const pull_request: string = core.getInput('pull_request_link')
-    const issue_comment_id: string = core.getInput('issue_comment_id')
+    const comment_id: string = core.getInput('issue_comment_id')
 
     let branch_ref = refParam
     if (pull_request !== '') {
@@ -48,7 +48,7 @@ async function run(): Promise<void> {
       )
     }
     core.info(
-      `Executing. comment: ${commentText} repo:${repo}, pull_request_link: ${pull_request}, issue comment id: ${issue_comment_id}`
+      `Executing. comment: ${commentText} repo:${repo}, pull_request_link: ${pull_request}, issue comment id: ${comment_id}`
     )
     if (commentText.includes('@measure')) {
       const commandUrl =
@@ -58,7 +58,7 @@ async function run(): Promise<void> {
         repository: repo,
         workflow_id: 'measure.yaml',
         inputs: {
-          issue_id: issue_comment_id
+          issue_comment_id: comment_id
         }
       }
       core.info(
