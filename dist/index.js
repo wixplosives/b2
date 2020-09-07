@@ -230,7 +230,7 @@ function run() {
                 branch_ref = yield get_branch_name(repo_stub_parts[0], repo_stub_parts[1], pull_request);
             }
             core.info(`Executing. comment: ${commentText} repo:${repo}, pull_request_link: ${pull_request}, issue comment id: ${comment_id}`);
-            if (commentText.includes('@c3-bot measure')) {
+            if (commentText.includes('@core3-ci measure')) {
                 const commandUrl = 'POST /repos/:repository/actions/workflows/:workflow_id/dispatches';
                 const commandParams = {
                     ref: branch_ref,

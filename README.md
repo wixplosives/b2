@@ -46,7 +46,7 @@ You can now validate the action by referencing `./` in a workflow in your repo (
 ```yaml
 - uses: ./
     with:
-      commentText: "@c3-bot measure"
+      commentText: "@core3-ci measure"
       ref: ${{ github.ref }}
       repo: 'wixplosives/b2'
 ```
