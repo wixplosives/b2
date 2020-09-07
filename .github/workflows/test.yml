@@ -22,7 +22,7 @@ jobs:
       - run: echo "${{ toJson(github) }}"
       - uses: ./
         with:
-          commentText: "@measure test"
+          commentText: "@c3-bot measure"
           ref: ${{ github.ref }}
           pull_request_link: "https://github.com/wixplosives/b2/pull/6"
           issue_comment_id: "679265938"

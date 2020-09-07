@@ -50,7 +50,7 @@ async function run(): Promise<void> {
     core.info(
       `Executing. comment: ${commentText} repo:${repo}, pull_request_link: ${pull_request}, issue comment id: ${comment_id}`
     )
-    if (commentText.includes('@measure')) {
+    if (commentText.includes('@c3-bot measure')) {
       const commandUrl =
         'POST /repos/:repository/actions/workflows/:workflow_id/dispatches'
       const commandParams = {
