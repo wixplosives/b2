@@ -252,7 +252,7 @@ function run() {
                         issue_comment_id: comment_id
                     }
                 };
-                core.info(`Found @measure command. repo: ${repo}. ref: ${commandParams.ref}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+                core.info(`Found ${command} command. repo: ${repo}. ref: ${commandParams.ref}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
                 if (dryrun === 'true') {
                     const paramsString = JSON.stringify(commandParams);
                     core.info(`Octokit dryrun. url: ${commandUrl} params: ${paramsString}`);

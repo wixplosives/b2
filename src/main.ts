@@ -74,7 +74,7 @@ async function run(): Promise<void> {
         }
       }
       core.info(
-        `Found @measure command. repo: ${repo}. ref: ${commandParams.ref}`
+        `Found ${command} command. repo: ${repo}. ref: ${commandParams.ref}`
       ) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
       if (dryrun === 'true') {
         const paramsString = JSON.stringify(commandParams)
