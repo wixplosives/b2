@@ -30,11 +30,12 @@ async function getBranchName(
 }
 
 export function getCommand(comment: string): string {
-  if (comment.includes('@core3-ci')) {
-    const splitted = comment.split('-', 3)
-    if (splitted.length > 2) {
-      return splitted[2]
-    }
+  const keyPhrase = '@core3-ci-'
+  if (comment.startsWith(keyPhrase)) {
+    const words = comment.split(' ')
+    const firstPart = words[0]
+    const command = firstPart.slice(keyPhrase.length, firstPart.length)
+    return command
   }
   return ''
 }

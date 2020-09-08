@@ -47,3 +47,23 @@ test('parse comment for command', () => {
   const retval = getCommand('@core3-ci-measure')
   expect(retval).toBe('measure')
 })
+
+test('parse comment for command, bad command', () => {
+  const retval = getCommand('@core3-cistam')
+  expect(retval).toBe('')
+})
+
+test('parse comment for command, no command', () => {
+  const retval = getCommand('some nice comment for a change')
+  expect(retval).toBe('')
+})
+
+test('parse comment for command, comand with addtional test', () => {
+  const retval = getCommand('@core3-ci-measure something')
+  expect(retval).toBe('measure')
+})
+
+test('parse comment for command, comand with addtional test', () => {
+  const retval = getCommand('@core3-ci-measure-report something')
+  expect(retval).toBe('measure-report')
+})
