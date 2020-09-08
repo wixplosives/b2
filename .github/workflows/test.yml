@@ -28,4 +28,4 @@ jobs:
           issue_comment_id: "679265938"
           repo: 'wixplosives/b2'
         env:
-          GITHUB_TOKEN: ${{ secrets.CIJOE_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
