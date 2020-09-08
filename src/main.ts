@@ -68,7 +68,7 @@ async function run(): Promise<void> {
       const commandParams = {
         ref: branch_ref,
         repository: repo,
-        workflow_id: `${command}.yaml`,
+        workflow_id: `${command}.yml`,
         inputs: {
           issue_comment_id: comment_id
         }
