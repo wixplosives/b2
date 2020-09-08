@@ -44,12 +44,12 @@ test('url parser bad param', () => {
 })
 
 test('parse comment for command', () => {
-  const retval = getCommand('@core3-ci-measure')
+  const retval = getCommand('@cijoe measure')
   expect(retval).toBe('measure')
 })
 
 test('parse comment for command, bad command', () => {
-  const retval = getCommand('@core3-cistam')
+  const retval = getCommand('@cijoe-cistam')
   expect(retval).toBe('')
 })
 
@@ -59,11 +59,11 @@ test('parse comment for command, no command', () => {
 })
 
 test('parse comment for command, comand with addtional test', () => {
-  const retval = getCommand('@core3-ci-measure something')
+  const retval = getCommand('@cijoe measure something')
   expect(retval).toBe('measure')
 })
 
 test('parse comment for command, comand with addtional test', () => {
-  const retval = getCommand('@core3-ci-measure-report something')
+  const retval = getCommand('@cijoe measure-report something')
   expect(retval).toBe('measure-report')
 })
