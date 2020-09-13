@@ -1,7 +1,7 @@
 import * as process from 'process'
 import * as cp from 'child_process'
 import * as path from 'path'
-import {parsePullRequestNumFromUrl} from "../src/main"
+import {parsePullRequestNumFromUrl, getCommand} from "../src/main"
 
 test('test runs', () => {
   process.env['INPUT_COMMENTTEXT'] = '@measure something'
@@ -41,4 +41,29 @@ test('url parser bad param', () => {
   expect(() => {
     parsePullRequestNumFromUrl('https://github.com/wixplosives/test-p-1/pull/notaprnumber')
   }).toThrow();
+})
+
+test('parse comment for command', () => {
+  const retval = getCommand('@cijoe measure')
+  expect(retval).toBe('measure')
+})
+
+test('parse comment for command, bad command', () => {
+  const retval = getCommand('@cijoe-cistam')
+  expect(retval).toBe('')
+})
+
+test('parse comment for command, no command', () => {
+  const retval = getCommand('some nice comment for a change')
+  expect(retval).toBe('')
+})
+
+test('parse comment for command, comand with addtional test', () => {
+  const retval = getCommand('@cijoe measure something')
+  expect(retval).toBe('measure')
+})
+
+test('parse comment for command, comand with addtional test', () => {
+  const retval = getCommand('@cijoe measure-report something')
+  expect(retval).toBe('measure-report')
 })
