@@ -11,7 +11,7 @@ export function parsePullRequestNumFromUrl(url: string): number {
   }
 }
 
-async function get_branch_name(
+async function getBranchName(
   repo_owner: string,
   repo_name: string,
   pull_request_url: string
@@ -29,6 +29,18 @@ async function get_branch_name(
   return Promise.resolve(retval.data.head.ref)
 }
 
+export function getCommand(comment: string): string {
+  const keyPhrase = '@cijoe'
+  if (comment.startsWith(keyPhrase)) {
+    const words = comment.split(' ')
+    if (words.length > 1) {
+      const command = words[1]
+      return command
+    }
+  }
+  return ''
+}
+
 async function run(): Promise<void> {
   try {
     const dryrun: string = core.getInput('dryrun')
@@ -41,7 +53,7 @@ async function run(): Promise<void> {
     let branch_ref = refParam
     if (pull_request !== '') {
       const repo_stub_parts = repo.split('/')
-      branch_ref = await get_branch_name(
+      branch_ref = await getBranchName(
         repo_stub_parts[0],
         repo_stub_parts[1],
         pull_request
@@ -50,19 +62,20 @@ async function run(): Promise<void> {
     core.info(
       `Executing. comment: ${commentText} repo:${repo}, pull_request_link: ${pull_request}, issue comment id: ${comment_id}`
     )
-    if (commentText.includes('@measure')) {
+    const command = getCommand(commentText)
+    if (command !== '') {
       const commandUrl =
         'POST /repos/:repository/actions/workflows/:workflow_id/dispatches'
       const commandParams = {
         ref: branch_ref,
         repository: repo,
-        workflow_id: 'measure.yaml',
+        workflow_id: `${command}.yml`,
         inputs: {
           issue_comment_id: comment_id
         }
       }
       core.info(
-        `Found @measure command. repo: ${repo}. ref: ${commandParams.ref}`
+        `Found ${command} command. repo: ${repo}. ref: ${commandParams.ref}`
       ) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
       if (dryrun === 'true') {
         const paramsString = JSON.stringify(commandParams)

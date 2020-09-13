@@ -19,13 +19,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: echo "${{ toJson(github) }}"
       - uses: ./
         with:
-          commentText: "@measure test"
+          commentText: "@cijoe measure"
           ref: ${{ github.ref }}
           pull_request_link: "https://github.com/wixplosives/b2/pull/6"
           issue_comment_id: "679265938"
           repo: 'wixplosives/b2'
         env:
-          GITHUB_TOKEN: ${{ secrets.CIJOE_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
