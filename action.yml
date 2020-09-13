@@ -17,7 +17,9 @@ inputs:
   pull_request_link:
     required: true
     description: 'pull request link ( github.event.issue.pull_request.url )"'
-
+  issue_comment_id:
+    required: false
+    description: 'issue comment link ( github.event.comment.id )"'  
 runs:
   using: 'node12'
   main: 'dist/index.js'

@@ -1,0 +1,24 @@
+name: fake_measure
+on:
+  workflow_dispatch:
+    inputs:
+      issue_comment_id:
+        description: "issue comment id"
+        required: false
+        default: "!!not specified!!"
+    
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Ref ${{ github.ref }}"
+      - run: echo "Issue comment link ${{ github.event.inputs.issue_comment_id }}"
+      - uses: octokit/request-action@v2.x
+        id: updateissue
+        with:
+          route: PATCH /repos/:repository/issues/comments/:comment_id
+          repository: ${{ github.repository }}
+          comment_id: ${{ github.event.inputs.issue_comment_id }}
+          body: "Some nice body on you"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
