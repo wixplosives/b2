@@ -1,7 +1,7 @@
 import * as process from 'process'
 import * as cp from 'child_process'
 import * as path from 'path'
-import {parsePullRequestNumFromUrl, getCommand} from "../src/main"
+import {parsePullRequestNumFromUrl, getCommand} from '../src/main'
 
 test('test runs', () => {
   process.env['INPUT_COMMENTTEXT'] = '@measure something'
@@ -26,21 +26,25 @@ test('test runs', () => {
   //expect(output.includes(expectedResponse)).toBeTruthy()
 })
 
-test('url parser', () =>{
-  const res = parsePullRequestNumFromUrl('https://github.com/wixplosives/test-p-1/pull/31')
+test('url parser', () => {
+  const res = parsePullRequestNumFromUrl(
+    'https://github.com/wixplosives/test-p-1/pull/31'
+  )
   expect(res).toBe(31)
 })
 
 test('url parser bad param', () => {
   expect(() => {
-    parsePullRequestNumFromUrl("watever")
-  }).toThrow();
+    parsePullRequestNumFromUrl('watever')
+  }).toThrow()
 })
 
 test('url parser bad param', () => {
   expect(() => {
-    parsePullRequestNumFromUrl('https://github.com/wixplosives/test-p-1/pull/notaprnumber')
-  }).toThrow();
+    parsePullRequestNumFromUrl(
+      'https://github.com/wixplosives/test-p-1/pull/notaprnumber'
+    )
+  }).toThrow()
 })
 
 test('parse comment for command', () => {
