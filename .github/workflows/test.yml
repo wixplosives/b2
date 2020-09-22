@@ -23,7 +23,7 @@ jobs:
         with:
           commentText: "@cijoe measure"
           ref: ${{ github.ref }}
-          pull_request_id: "54"
+          pull_request_id: "6"
           repo: 'wixplosives/b2'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

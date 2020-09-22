@@ -201,15 +201,14 @@ function parsePullRequestNumFromUrl(url) {
     }
 }
 exports.parsePullRequestNumFromUrl = parsePullRequestNumFromUrl;
-function getBranchName(repo_owner, repo_name, pull_request_url) {
+function getBranchName(repo_owner, repo_name, pull_request_id) {
     return __awaiter(this, void 0, void 0, function* () {
-        const pull_request_num = parsePullRequestNumFromUrl(pull_request_url);
         const octokit = new action_1.Octokit();
         const commandUrl = 'GET /repos/:owner/:repo/pulls/:pull_number';
         const commandParams = {
             owner: repo_owner,
             repo: repo_name,
-            pull_number: pull_request_num
+            pull_number: Number(pull_request_id)
         };
         const retval = yield octokit.request(commandUrl, commandParams);
         return Promise.resolve(retval.data.head.ref);
@@ -234,14 +233,13 @@ function run() {
             const commentText = core.getInput('commentText');
             const refParam = core.getInput('ref');
             const repo = core.getInput('repo');
-            const pull_request = core.getInput('pull_request_link');
-            const comment_id = core.getInput('issue_comment_id');
+            const pull_request_id = core.getInput('pull_request_id');
             let branch_ref = refParam;
-            if (pull_request !== '') {
+            if (pull_request_id !== '') {
                 const repo_stub_parts = repo.split('/');
-                branch_ref = yield getBranchName(repo_stub_parts[0], repo_stub_parts[1], pull_request);
+                branch_ref = yield getBranchName(repo_stub_parts[0], repo_stub_parts[1], pull_request_id);
             }
-            core.info(`Executing. comment: ${commentText} repo:${repo}, pull_request_link: ${pull_request}, issue comment id: ${comment_id}`);
+            core.info(`Executing. comment: ${commentText} repo:${repo}, pull_request_id: ${pull_request_id}`);
             const command = getCommand(commentText);
             if (command !== '') {
                 const commandUrl = 'POST /repos/:repository/actions/workflows/:workflow_id/dispatches';
@@ -250,7 +248,7 @@ function run() {
                     repository: repo,
                     workflow_id: `${command}.yml`,
                     inputs: {
-                        issue_comment_id: comment_id
+                        pill_request_id: pull_request_id
                     }
                 };
                 core.info(`Found ${command} command. repo: ${repo}. ref: ${commandParams.ref}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
