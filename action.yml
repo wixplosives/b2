@@ -14,12 +14,9 @@ inputs:
   repo:
     required: true
     description: 'repo to run action on org/reponame'
-  pull_request_link:
+  pull_request_id:
     required: true
-    description: 'pull request link ( github.event.issue.pull_request.url )"'
-  issue_comment_id:
-    required: false
-    description: 'issue comment link ( github.event.comment.id )"'  
+    description: 'pull request id ( github.event.issue.number )"'
 runs:
   using: 'node12'
   main: 'dist/index.js'

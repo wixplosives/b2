@@ -187,7 +187,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.parsePullRequestNumFromUrl = void 0;
+exports.getCommand = exports.parsePullRequestNumFromUrl = void 0;
 const core = __importStar(__webpack_require__(470));
 const action_1 = __webpack_require__(725);
 function parsePullRequestNumFromUrl(url) {
@@ -201,20 +201,31 @@ function parsePullRequestNumFromUrl(url) {
     }
 }
 exports.parsePullRequestNumFromUrl = parsePullRequestNumFromUrl;
-function get_branch_name(repo_owner, repo_name, pull_request_url) {
+function getBranchName(repo_owner, repo_name, pull_request_id) {
     return __awaiter(this, void 0, void 0, function* () {
-        const pull_request_num = parsePullRequestNumFromUrl(pull_request_url);
         const octokit = new action_1.Octokit();
         const commandUrl = 'GET /repos/:owner/:repo/pulls/:pull_number';
         const commandParams = {
             owner: repo_owner,
             repo: repo_name,
-            pull_number: pull_request_num
+            pull_number: Number(pull_request_id)
         };
         const retval = yield octokit.request(commandUrl, commandParams);
         return Promise.resolve(retval.data.head.ref);
     });
 }
+function getCommand(comment) {
+    const keyPhrase = '@cijoe';
+    if (comment.startsWith(keyPhrase)) {
+        const words = comment.split(' ');
+        if (words.length > 1) {
+            const command = words[1];
+            return command;
+        }
+    }
+    return '';
+}
+exports.getCommand = getCommand;
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -222,25 +233,25 @@ function run() {
             const commentText = core.getInput('commentText');
             const refParam = core.getInput('ref');
             const repo = core.getInput('repo');
-            const pull_request = core.getInput('pull_request_link');
-            const comment_id = core.getInput('issue_comment_id');
+            const pull_request_number = core.getInput('pull_request_id');
             let branch_ref = refParam;
-            if (pull_request !== '') {
+            if (pull_request_number !== '') {
                 const repo_stub_parts = repo.split('/');
-                branch_ref = yield get_branch_name(repo_stub_parts[0], repo_stub_parts[1], pull_request);
+                branch_ref = yield getBranchName(repo_stub_parts[0], repo_stub_parts[1], pull_request_number);
             }
-            core.info(`Executing. comment: ${commentText} repo:${repo}, pull_request_link: ${pull_request}, issue comment id: ${comment_id}`);
-            if (commentText.includes('@measure')) {
+            core.info(`Executing. comment: ${commentText} repo:${repo}, pull_request_id: ${pull_request_number}`);
+            const command = getCommand(commentText);
+            if (command !== '') {
                 const commandUrl = 'POST /repos/:repository/actions/workflows/:workflow_id/dispatches';
                 const commandParams = {
                     ref: branch_ref,
                     repository: repo,
-                    workflow_id: 'measure.yaml',
+                    workflow_id: `${command}.yml`,
                     inputs: {
-                        issue_comment_id: comment_id
+                        pull_request_id: pull_request_number
                     }
                 };
-                core.info(`Found @measure command. repo: ${repo}. ref: ${commandParams.ref}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+                core.info(`Found ${command} command. repo: ${repo}. ref: ${commandParams.ref}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
                 if (dryrun === 'true') {
                     const paramsString = JSON.stringify(commandParams);
                     core.info(`Octokit dryrun. url: ${commandUrl} params: ${paramsString}`);
