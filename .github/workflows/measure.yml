@@ -2,7 +2,7 @@ name: fake_measure
 on:
   workflow_dispatch:
     inputs:
-      pill_request_id:
+      pull_request_id:
         description: "pull request id to put results to"
         required: false
         default: "!!not specified!!"
