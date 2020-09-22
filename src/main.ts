@@ -14,15 +14,14 @@ export function parsePullRequestNumFromUrl(url: string): number {
 async function getBranchName(
   repo_owner: string,
   repo_name: string,
-  pull_request_url: string
+  pull_request_id: string
 ): Promise<string> {
-  const pull_request_num = parsePullRequestNumFromUrl(pull_request_url)
   const octokit = new Octokit()
   const commandUrl = 'GET /repos/:owner/:repo/pulls/:pull_number'
   const commandParams = {
     owner: repo_owner,
     repo: repo_name,
-    pull_number: pull_request_num
+    pull_number: Number(pull_request_id)
   }
   const retval = await octokit.request(commandUrl, commandParams)
 
@@ -47,20 +46,19 @@ async function run(): Promise<void> {
     const commentText: string = core.getInput('commentText')
     const refParam: string = core.getInput('ref')
     const repo: string = core.getInput('repo')
-    const pull_request: string = core.getInput('pull_request_link')
-    const comment_id: string = core.getInput('issue_comment_id')
+    const pull_request_id: string = core.getInput('pull_request_id')
 
     let branch_ref = refParam
-    if (pull_request !== '') {
+    if (pull_request_id !== '') {
       const repo_stub_parts = repo.split('/')
       branch_ref = await getBranchName(
         repo_stub_parts[0],
         repo_stub_parts[1],
-        pull_request
+        pull_request_id
       )
     }
     core.info(
-      `Executing. comment: ${commentText} repo:${repo}, pull_request_link: ${pull_request}, issue comment id: ${comment_id}`
+      `Executing. comment: ${commentText} repo:${repo}, pull_request_id: ${pull_request_id}`
     )
     const command = getCommand(commentText)
     if (command !== '') {
@@ -71,7 +69,7 @@ async function run(): Promise<void> {
         repository: repo,
         workflow_id: `${command}.yml`,
         inputs: {
-          issue_comment_id: comment_id
+          pill_request_id: pull_request_id
         }
       }
       core.info(

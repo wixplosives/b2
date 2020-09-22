@@ -2,10 +2,11 @@ name: fake_measure
 on:
   workflow_dispatch:
     inputs:
-      issue_comment_id:
-        description: "issue comment id"
+      pill_request_id:
+        description: "pull request id to put results to"
         required: false
         default: "!!not specified!!"
+  
     
 jobs:
   build:
@@ -16,9 +17,9 @@ jobs:
       - uses: octokit/request-action@v2.x
         id: updateissue
         with:
-          route: PATCH /repos/:repository/issues/comments/:comment_id
+          route: POST /repos/:repository/issues/:pull_request_id/comments
+          pull_request_id: ${{ github.event.inputs.pr_issue }}
           repository: ${{ github.repository }}
-          comment_id: ${{ github.event.inputs.issue_comment_id }}
           body: "Some nice body on you"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
