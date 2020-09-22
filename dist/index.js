@@ -233,13 +233,13 @@ function run() {
             const commentText = core.getInput('commentText');
             const refParam = core.getInput('ref');
             const repo = core.getInput('repo');
-            const pull_request_id = core.getInput('pull_request_id');
+            const pull_request_number = core.getInput('pull_request_id');
             let branch_ref = refParam;
-            if (pull_request_id !== '') {
+            if (pull_request_number !== '') {
                 const repo_stub_parts = repo.split('/');
-                branch_ref = yield getBranchName(repo_stub_parts[0], repo_stub_parts[1], pull_request_id);
+                branch_ref = yield getBranchName(repo_stub_parts[0], repo_stub_parts[1], pull_request_number);
             }
-            core.info(`Executing. comment: ${commentText} repo:${repo}, pull_request_id: ${pull_request_id}`);
+            core.info(`Executing. comment: ${commentText} repo:${repo}, pull_request_id: ${pull_request_number}`);
             const command = getCommand(commentText);
             if (command !== '') {
                 const commandUrl = 'POST /repos/:repository/actions/workflows/:workflow_id/dispatches';
@@ -248,7 +248,7 @@ function run() {
                     repository: repo,
                     workflow_id: `${command}.yml`,
                     inputs: {
-                        pill_request_id: pull_request_id
+                        pull_request_id: pull_request_number
                     }
                 };
                 core.info(`Found ${command} command. repo: ${repo}. ref: ${commandParams.ref}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true

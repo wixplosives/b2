@@ -46,19 +46,19 @@ async function run(): Promise<void> {
     const commentText: string = core.getInput('commentText')
     const refParam: string = core.getInput('ref')
     const repo: string = core.getInput('repo')
-    const pull_request_id: string = core.getInput('pull_request_id')
+    const pull_request_number: string = core.getInput('pull_request_id')
 
     let branch_ref = refParam
-    if (pull_request_id !== '') {
+    if (pull_request_number !== '') {
       const repo_stub_parts = repo.split('/')
       branch_ref = await getBranchName(
         repo_stub_parts[0],
         repo_stub_parts[1],
-        pull_request_id
+        pull_request_number
       )
     }
     core.info(
-      `Executing. comment: ${commentText} repo:${repo}, pull_request_id: ${pull_request_id}`
+      `Executing. comment: ${commentText} repo:${repo}, pull_request_id: ${pull_request_number}`
     )
     const command = getCommand(commentText)
     if (command !== '') {
@@ -69,7 +69,7 @@ async function run(): Promise<void> {
         repository: repo,
         workflow_id: `${command}.yml`,
         inputs: {
-          pill_request_id: pull_request_id
+          pull_request_id: pull_request_number
         }
       }
       core.info(
