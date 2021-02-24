@@ -85,7 +85,7 @@ async function run(): Promise<void> {
     }
     core.setOutput('Exiting', new Date().toTimeString())
   } catch (error) {
-    core.setFailed(error.message)
+    core.info(error.message)
   }
 }
 
