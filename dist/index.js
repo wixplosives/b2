@@ -295,9 +295,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCommand = exports.parsePullRequestNumFromUrl = void 0;
+exports.getCommandArgs = exports.getCommand = exports.parsePullRequestNumFromUrl = void 0;
 const core = __importStar(__webpack_require__(470));
 const action_1 = __webpack_require__(725);
+const keyPhrase = '/helmus';
 function parsePullRequestNumFromUrl(url) {
     const parts = url.split('/');
     if (parts.length > 1 && !isNaN(+parts[parts.length - 1])) {
@@ -323,7 +324,6 @@ function getBranchName(repo_owner, repo_name, pull_request_id) {
     });
 }
 function getCommand(comment) {
-    const keyPhrase = '@cijoe';
     if (comment.startsWith(keyPhrase)) {
         const words = comment.split(' ');
         if (words.length > 1) {
@@ -334,6 +334,17 @@ function getCommand(comment) {
     return '';
 }
 exports.getCommand = getCommand;
+function getCommandArgs(comment) {
+    if (comment.startsWith(keyPhrase)) {
+        const words = comment.split(' ');
+        if (words.length > 2) {
+            const command = words.slice(2);
+            return command;
+        }
+    }
+    return [];
+}
+exports.getCommandArgs = getCommandArgs;
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -349,6 +360,7 @@ function run() {
             }
             core.info(`Executing. comment: ${commentText} repo:${repo}, pull_request_id: ${pull_request_number}`);
             const command = getCommand(commentText);
+            const commandArgs = getCommandArgs(commentText);
             if (command !== '') {
                 const commandUrl = 'POST /repos/:repository/actions/workflows/:workflow_id/dispatches';
                 const commandParams = {
@@ -356,10 +368,11 @@ function run() {
                     repository: repo,
                     workflow_id: `${command}.yml`,
                     inputs: {
-                        pull_request_id: pull_request_number
+                        pull_request_id: pull_request_number,
+                        params: commandArgs.join(' ')
                     }
                 };
-                core.info(`Found ${command} command. repo: ${repo}. ref: ${commandParams.ref}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+                core.info(`Found ${command} command with args ${commandArgs} . repo: ${repo}. ref: ${commandParams.ref}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
                 if (dryrun === 'true') {
                     const paramsString = JSON.stringify(commandParams);
                     core.info(`Octokit dryrun. url: ${commandUrl} params: ${paramsString}`);
@@ -369,7 +382,8 @@ function run() {
                     yield octokit.request(commandUrl, commandParams);
                 }
             }
-            core.setOutput('Exiting', new Date().toTimeString());
+            core.info("Exiting.");
+            core.setOutput('Exiting.', new Date().toTimeString());
         }
         catch (error) {
             core.info(error.message);

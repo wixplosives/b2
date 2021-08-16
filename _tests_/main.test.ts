@@ -1,7 +1,7 @@
 import * as process from 'process'
 import * as cp from 'child_process'
 import * as path from 'path'
-import {parsePullRequestNumFromUrl, getCommand} from '../src/main'
+import {parsePullRequestNumFromUrl, getCommand, getCommandArgs} from '../src/main'
 
 test('test runs', () => {
   process.env['INPUT_COMMENTTEXT'] = '@measure something'
@@ -48,12 +48,12 @@ test('url parser bad param', () => {
 })
 
 test('parse comment for command', () => {
-  const retval = getCommand('@cijoe measure')
+  const retval = getCommand('/helmus measure')
   expect(retval).toBe('measure')
 })
 
 test('parse comment for command, bad command', () => {
-  const retval = getCommand('@cijoe-cistam')
+  const retval = getCommand('/helmus-cistam')
   expect(retval).toBe('')
 })
 
@@ -63,11 +63,18 @@ test('parse comment for command, no command', () => {
 })
 
 test('parse comment for command, comand with addtional test', () => {
-  const retval = getCommand('@cijoe measure something')
+  const retval = getCommand('/helmus measure something')
   expect(retval).toBe('measure')
 })
 
 test('parse comment for command, comand with addtional test', () => {
-  const retval = getCommand('@cijoe measure-report something')
+  const retval = getCommand('/helmus measure-report something')
   expect(retval).toBe('measure-report')
+})
+
+
+test('parse comment for command agrs', () => {
+  const retval = getCommandArgs('/helmus measure-report something')
+  expect(retval.length).toBe(1)
+  expect(retval[0]).toBe('something')
 })

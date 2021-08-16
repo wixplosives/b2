@@ -1,6 +1,8 @@
 import * as core from '@actions/core'
 import {Octokit} from '@octokit/action'
 
+const keyPhrase = '/helmus'
+
 export function parsePullRequestNumFromUrl(url: string): number {
   const parts = url.split('/')
   if (parts.length > 1 && !isNaN(+parts[parts.length - 1])) {
@@ -29,7 +31,6 @@ async function getBranchName(
 }
 
 export function getCommand(comment: string): string {
-  const keyPhrase = '@cijoe'
   if (comment.startsWith(keyPhrase)) {
     const words = comment.split(' ')
     if (words.length > 1) {
@@ -38,6 +39,17 @@ export function getCommand(comment: string): string {
     }
   }
   return ''
+}
+
+export function getCommandArgs(comment: string): string[]{
+  if (comment.startsWith(keyPhrase)) {
+    const words = comment.split(' ')
+    if (words.length > 2) {
+      const command = words.slice(2)
+      return command
+    }
+  }
+  return []
 }
 
 async function run(): Promise<void> {
@@ -61,6 +73,7 @@ async function run(): Promise<void> {
       `Executing. comment: ${commentText} repo:${repo}, pull_request_id: ${pull_request_number}`
     )
     const command = getCommand(commentText)
+    const commandArgs = getCommandArgs(commentText)
     if (command !== '') {
       const commandUrl =
         'POST /repos/:repository/actions/workflows/:workflow_id/dispatches'
@@ -69,11 +82,12 @@ async function run(): Promise<void> {
         repository: repo,
         workflow_id: `${command}.yml`,
         inputs: {
-          pull_request_id: pull_request_number
+          pull_request_id: pull_request_number,
+          params: commandArgs.join(' ')
         }
       }
       core.info(
-        `Found ${command} command. repo: ${repo}. ref: ${commandParams.ref}`
+        `Found ${command} command with args ${commandArgs} . repo: ${repo}. ref: ${commandParams.ref}`
       ) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
       if (dryrun === 'true') {
         const paramsString = JSON.stringify(commandParams)
@@ -83,7 +97,8 @@ async function run(): Promise<void> {
         await octokit.request(commandUrl, commandParams)
       }
     }
-    core.setOutput('Exiting', new Date().toTimeString())
+    core.info("Exiting.")
+    core.setOutput('Exiting.', new Date().toTimeString())
   } catch (error) {
     core.info(error.message)
   }
