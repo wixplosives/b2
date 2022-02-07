@@ -41,7 +41,7 @@ export function getCommand(comment: string): string {
   return ''
 }
 
-export function getCommandArgs(comment: string): string[]{
+export function getCommandArgs(comment: string): string[] {
   if (comment.startsWith(keyPhrase)) {
     const words = comment.split(' ')
     if (words.length > 2) {
@@ -97,7 +97,7 @@ async function run(): Promise<void> {
         await octokit.request(commandUrl, commandParams)
       }
     }
-    core.info("Exiting.")
+    core.info('Exiting.')
     core.setOutput('Exiting.', new Date().toTimeString())
   } catch (error) {
     core.info(error.message)
