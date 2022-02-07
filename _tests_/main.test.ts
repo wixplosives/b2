@@ -1,7 +1,11 @@
 import * as process from 'process'
 import * as cp from 'child_process'
 import * as path from 'path'
-import {parsePullRequestNumFromUrl, getCommand, getCommandArgs} from '../src/main'
+import {
+  parsePullRequestNumFromUrl,
+  getCommand,
+  getCommandArgs
+} from '../src/main'
 
 test('test runs', () => {
   process.env['INPUT_COMMENTTEXT'] = '@measure something'
@@ -71,7 +75,6 @@ test('parse comment for command, comand with addtional test', () => {
   const retval = getCommand('/helmus measure-report something')
   expect(retval).toBe('measure-report')
 })
-
 
 test('parse comment for command agrs', () => {
   const retval = getCommandArgs('/helmus measure-report something')
